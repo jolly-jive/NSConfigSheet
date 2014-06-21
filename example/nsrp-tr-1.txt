@@ -1,0 +1,41 @@
+# This configuration example is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  High Availability
+#  Release 6.3.0, Rev. 01
+#  Part 1: High Availability /
+#  Chapter 1: NetScreen Redundancy Protocol /
+#  Configuration Examples /
+#  Configuring Active/Active NSRP in Transparent Mode
+
+# 1. Cluster and VSD Groups for Device A
+set interface ethernet2/7 zone "ha"
+set interface ethernet2/8 zone "ha"
+set nsrp cluster id 7
+# unset nsrp vsd-group id 0  # no meaning for this module.
+set nsrp vsd-group id 5 priority 50
+set nsrp vsd-group id 5 preempt
+set nsrp vsd-group id 7 priority 100
+set nsrp vsd-group id 7 preempt
+set nsrp rto-mirror sync
+
+# 3. Create VLAN Group v100 and Assign It to VSD 5:
+set vlan group name "v100"
+set vlan group "v100" 100
+set vlan group "v100" vsd-group id 5
+
+# 4. Create VLAN Group v200 and Assign It to VSD 7:
+set vlan group name "v200"
+set vlan group "v200" 200
+set vlan group "v200" vsd-group id 7
+
+# 5. Create L2 zone and Assign the VLAN Group to Different Zones:
+#set zone name "l2-aa-trust" l2
+#set zone name "l2-aa-untrust" l2
+set vlan port ethernet2/1 group v100 zone "L2-aa-trust"
+set vlan port ethernet2/2 group v100 zone "L2-aa-untrust"
+set vlan port ethernet2/1 group v200 zone "L2-aa-trust"
+set vlan port ethernet2/2 group v200 zone "L2-aa-untrust"
+
+# 6. Create Policy on Both Directions:
+set policy id 1000 from "l2-aa-untrust" to "l2-aa-trust" "any" "any" "any" permit
+set policy id 1001 from "l2-aa-trust" to "l2-aa-untrust" "any" "any" "any" permit

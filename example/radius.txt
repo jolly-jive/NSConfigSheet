@@ -1,0 +1,10 @@
+set auth-server "Radius1" id 1
+set auth-server "Radius1" server-name "172.16.1.1"
+set auth-server "Radius1" account-type 802.1X
+set auth-server "Radius1" username separator "@" number 1
+set auth-server "Radius1" username domain "juniper.net"
+set auth-server "Radius1" radius port 1812
+set auth-server "Radius1" radius secret "secret123"
+set interface ethernet0/6 dot1x
+set interface ethernet0/6 dot1x max-user 1
+set interface ethernet0/6 dot1x auth-server "Radius1"

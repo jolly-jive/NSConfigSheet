@@ -1,0 +1,19 @@
+# This configuration example is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  Fundamentals
+#  Release 6.3.0, Rev. 01
+#  Part 1: Fundamentals / Chapter 4: Interface Modes /
+#  NAT Mode / Configuring NAT Mode
+set interface ethernet0/1 zone "Trust"
+set interface ethernet0/1 ip 10.1.1.1/24
+set interface ethernet0/1 nat
+set interface ethernet0/3 zone "Untrust"
+set interface ethernet0/3 ip 1.1.1.1/24
+set interface ethernet0/3 route
+set interface ethernet0/3 vip interface-ip 80 "http" 10.1.1.4
+set interface ethernet0/3 vip interface-ip + 443 "https" 10.1.1.4
+set interface ethernet0/3 vip 1.1.1.5 25 "mail" 10.1.1.5
+set interface ethernet0/3 vip 1.1.1.5 + 465 "smtps" 10.1.1.5
+set vrouter "trust-vr" route 0.0.0.0/0 interface ethernet0/3 gateway 1.1.1.250
+set policy id 1000 from "Trust" to "Untrust" "any" "any" "any" permit
+set policy id 1001 from "Untrust" to "global" "any" "vip(1.1.1.5)" "mail" permit

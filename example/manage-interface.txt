@@ -1,0 +1,12 @@
+# This configuration example is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  Fundamentals
+#  Release 6.3.0, Rev. 01
+#  Part 1: Fundamentals / Chapter 3: Interfaces /
+#  Configuring Security Zone Interfaces /
+#  Modifying Interface Settings
+set interface ethernet0/1 manage-ip 10.1.1.12
+set interface ethernet0/1 manage ssh
+set interface ethernet0/1 manage ssl
+unset interface ethernet0/1 manage telnet
+unset interface ethernet0/1 manage web

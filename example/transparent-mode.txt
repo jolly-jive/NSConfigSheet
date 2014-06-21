@@ -1,0 +1,22 @@
+# This configuration example is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  Fundamentals
+#  Release 6.3.0, Rev. 01
+#  Part 1: Fundamentals / Chapter 4: Interface Modes /
+#  Transparent Mode / Unknown Unicast Options /
+#  Configuring Transparent Mode
+set interface vlan1 ip 1.1.1.1/24
+set interface vlan1 manage web
+set interface vlan1 manage telnet
+set interface vlan1 manage ping
+set admin telnet port 4646
+set interface ethernet0/1 ip 0.0.0.0/0
+set interface ethernet0/1 zone "v1-trust"
+set interface ethernet0/3 ip 0.0.0.0/0
+set interface ethernet0/3 zone "v1-untrust"
+set address "v1-trust" "FTP_Server" 1.1.1.5/32
+set address "v1-trust" "Mail_Server" 1.1.1.10/32
+set vrouter "trust-vr" route 0.0.0.0/0 interface vlan1 gateway 1.1.1.250 metric 1
+set policy id 1001 from "v1-trust" to "v1-untrust" "any" "any" "any" permit
+set policy id 1002 from "v1-untrust" to "v1-trust" "any" "Mail_Server" "mail" permit
+set policy id 1003 from "v1-untrust" to "v1-trust" "any" "FTP_Server" "ftp-get" permit

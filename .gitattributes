@@ -1,0 +1,2 @@
+*.ps*1*		filter=utf16 eol=crlf
+*.txt		eol=crlf

@@ -1,0 +1,39 @@
+# This sample is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  Fundamentals
+#  Release 6.3.0, Rev. 01
+#  Part 1: Fundamentals / Chapter 1: ScreenOS Architecture /
+#  ScreenOS Architecture Example
+set zone name "finance"
+set zone name "eng"
+set zone name "mail"
+set zone "finance" vrouter trust-vr
+set zone "eng" vrouter trust-vr
+set zone "mail" vrouter untrust-vr
+set zone "trust" vrouter trust-vr
+set zone "untrust" vrouter untrust-vr
+set zone "dmz" vrouter untrust-vr
+set interface ethernet3/2 zone "trust"
+set interface ethernet3/2 ip 10.1.1.1/24
+set interface ethernet3/2 manage ping
+set interface ethernet3/2 manage webui
+set interface ethernet3/2 manage telnet
+set interface ethernet3/2 manage snmp
+set interface ethernet3/2 manage ssh
+set interface ethernet3/2.1 tag 1 zone "finance"
+set interface ethernet3/2.1 ip 10.1.2.1/24
+set interface ethernet3/2.1 manage ping
+set interface ethernet3/1 zone "eng"
+set interface ethernet3/1 ip 10.1.3.1/24
+set interface ethernet3/1 manage ping
+set interface ethernet1/1 zone "mail"
+set interface ethernet1/1 ip 1.3.3.1/24
+set interface ethernet1/1.2 tag 2 zone "mail"
+set interface ethernet1/1.2 ip 1.4.4.1/24
+set interface ethernet1/2 zone "untrust"
+set interface ethernet1/2 ip 1.1.1.1/24
+set interface ethernet1/2 manage snmp
+set interface ethernet2/2 zone "dmz"
+set interface ethernet2/2 ip 1.2.2.1/24
+set vrouter trust-vr route 0.0.0.0/0 vrouter "untrust-vr"
+set vrouter untrust-vr route 0.0.0.0/0 interface ethernet1/2 gateway 1.1.1.254

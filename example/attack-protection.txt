@@ -1,0 +1,90 @@
+# This configuration example is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  Attack Detection and Defense Mechanisms
+#  Release 6.3.0, Rev. 01
+set interface ethernet2 ip 1.2.2.1/24
+set interface ethernet3 zone "Untrust"
+set interface ethernet3 ip 1.1.1.1/24
+set address "DMZ" "ws1" 1.2.2.10/32
+set address "DMZ" "ws2" 1.2.2.20/32
+set address "DMZ" "ws3" 1.2.2.30/32
+set address "DMZ" "ws4" 1.2.2.40/32
+set group address "DMZ" "web_servers" add "ws1"
+set group address "DMZ" "web_servers" add "ws2"
+set group address "DMZ" "web_servers" add "ws3"
+set group address "DMZ" "web_servers" add "ws4"
+set zone "Trust" screen ip-spoofing
+set zone "Trust" screen ip-spoofing drop-no-rpf-route
+set zone "Trust" screen ip-spoofing zone-based
+set zone "Trust" screen limit-session source-ip-based 80
+set zone "Trust" screen limit-session source-ip-based
+set policy id 1 from "Untrust" to "DMZ" "Any" "web_servers" "HTTP" permit
+set zone "DMZ" screen ip-spoofing
+unset zone "DMZ" screen ip-spoofing drop-no-rpf-route
+unset zone "DMZ" screen ip-spoofing zone-based
+set zone "DMZ" screen limit-session source-ip-based 1
+set zone "DMZ" screen limit-session source-ip-based
+unset zone "DMZ" screen syn-flood
+unset zone "DMZ" screen icmp-flood
+set zone "DMZ" screen udp-flood
+set zone "DMZ" screen ping-death
+set zone "DMZ" screen land
+set zone "DMZ" screen tear-drop
+set zone "DMZ" screen winnuke
+unset zone "DMZ" screen block-frag
+set zone "DMZ" screen ip-bad-option
+unset zone "DMZ" screen ip-timestamp-opt
+set zone "DMZ" screen ip-security-opt
+unset zone "DMZ" screen ip-stream-opt
+set zone "DMZ" screen ip-record-route
+unset zone "DMZ" screen ip-loose-src-route
+set zone "DMZ" screen ip-strict-src-route
+unset zone "DMZ" screen ip-filter-src
+set zone "DMZ" screen syn-frag
+unset zone "DMZ" screen tcp-no-flag
+set zone "DMZ" screen syn-fin
+unset zone "DMZ" screen fin-no-ack
+set zone "DMZ" screen unknown-protocol
+unset zone "DMZ" screen ip-sweep
+unset zone "DMZ" screen port-scan
+unset zone "DMZ" screen tcp-sweep
+unset zone "DMZ" screen udp-sweep
+unset zone "Untrust" screen ip-spoofing
+set zone "Untrust" screen limit-session destination-ip-based 4000
+set zone "Untrust" screen limit-session destination-ip-based
+set zone "Untrust" screen syn-flood attack-threshold 625
+set zone "Untrust" screen syn-flood alarm-threshold 250
+set zone "Untrust" screen syn-flood source-threshold 25
+set zone "Untrust" screen syn-flood timeout 20
+set zone "Untrust" screen syn-flood queue-size 1000
+set zone "Untrust" screen syn-flood
+set zone "Untrust" screen icmp-flood threshold 5000
+set zone "Untrust" screen icmp-flood
+set zone "Untrust" screen udp-flood threshold 2500
+set zone "Untrust" screen udp-flood
+unset zone "Untrust" screen ping-death
+unset zone "Untrust" screen land
+unset zone "Untrust" screen tear-drop
+unset zone "Untrust" screen winnuke
+set zone "Untrust" screen block-frag
+unset zone "Untrust" screen ip-bad-option
+set zone "Untrust" screen ip-timestamp-opt
+unset zone "Untrust" screen ip-security-opt
+set zone "Untrust" screen ip-stream-opt
+unset zone "Untrust" screen ip-record-route
+set zone "Untrust" screen ip-loose-src-route
+unset zone "Untrust" screen ip-strict-src-route
+set zone "Untrust" screen ip-filter-src
+unset zone "Untrust" screen syn-frag
+set zone "Untrust" screen tcp-no-flag
+unset zone "Untrust" screen syn-fin
+set zone "Untrust" screen fin-no-ack
+unset zone "Untrust" screen unknown-protocol
+set zone "Untrust" screen ip-sweep threshold  100
+set zone "Untrust" screen ip-sweep
+set zone "Untrust" screen port-scan threshold 200
+set zone "Untrust" screen port-scan
+set zone "Untrust" screen tcp-sweep threshold 8200
+set zone "Untrust" screen tcp-sweep
+set zone "Untrust" screen udp-sweep threshold 8300
+set zone "Untrust" screen udp-sweep

@@ -1,0 +1,30 @@
+# This configuration example is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  High Availability
+#  Release 6.3.0, Rev. 01
+#  Part 1: High Availability /
+#  Chapter 1: NetScreen Redundancy Protocol /
+#  Configuration Examples /
+
+# Creating an NSRP Cluster
+# 2. NSRP Cluster and Communication Security
+set nsrp cluster id 1
+set nsrp auth password 725dCaIgDL
+set nsrp encrypt password WiJoaw4177
+
+# Configuring an Active/Passive NSRP Cluster
+# 3. Interfaces
+set interface ethernet7 zone "ha"
+set interface ethernet8 zone "ha"
+set interface ethernet1 zone "untrust"
+set interface ethernet1 ip 210.1.1.1/24
+set interface ethernet3 zone "trust"
+set interface ethernet3 ip 10.1.1.1/24
+set interface ethernet3 manage-ip 10.1.1.21
+set interface ethernet3 nat
+
+# 4. NSRP
+set nsrp rto-mirror sync
+set nsrp monitor interface ethernet1
+set nsrp monitor interface ethernet3
+set nsrp cluster id 1

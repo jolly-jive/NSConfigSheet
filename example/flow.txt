@@ -1,0 +1,36 @@
+# This configuration example is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  Attack Detection and Defense Mechanisms
+#  Release 6.3.0, Rev. 01
+set flow syn-proxy syn-cookie
+set flow aging low-watermark 70
+set flow aging high-watermark 80
+set flow aging early-ageout 4
+unset flow tcp-syn-check-in-tunnel
+set flow all-tcp-mss 1000
+unset flow allow-dns-reply
+set flow check tcp-rst-sequence
+unset flow force-ip-reassembly
+set flow gre-in-tcp-mss
+unset flow gre-out-tcp-mss
+set flow hub-n-spoke-mip
+set flow initial-timeout 5
+unset flow icmp-ur-session-close
+set flow icmp-ur-msg-filter
+unset flow mac-cache mgt
+set flow mac-flooding
+set flow max-frag-pkt-size 900
+unset flow multicast idp
+set flow multicast install-hw-session
+unset flow no-tcp-seq-check
+set flow path-mtu
+set flow reverse-route clear-text always
+unset flow reverse-route tunnel
+set flow route-cache
+set flow route-change-timeout 10
+set flow tcp-mss 1005
+unset flow tcp-rst-invalid-session
+set flow tcp-syn-bit-check
+unset flow tcp-syn-check
+set flow tcp-syn-check-in-tunnel
+set flow vpn-tcp-mss 995

@@ -1,0 +1,19 @@
+# This configuration example is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  High Availability
+#  Release 6.3.0, Rev. 01
+#  Part 1: High Availability /
+#  Chapter 1: NetScreen Redundancy Protocol /
+#  Configuration Examples /
+#  Configuring Active/Active NSRP in Transparent Mode
+
+# 2. Cluster and VSD Groups for Device B
+set interface ethernet2/7 zone "ha"
+set interface ethernet2/8 zone "ha"
+set nsrp cluster id 7
+# unset nsrp vsd-group id 0  # no meaning for this module.
+set nsrp vsd-group id 7 priority 100
+set nsrp vsd-group id 7 preempt
+set nsrp vsd-group id 7 priority 50
+set nsrp vsd-group id 7 preempt
+set nsrp rto-mirror sync

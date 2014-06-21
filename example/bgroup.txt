@@ -1,0 +1,12 @@
+# This configuration example is quoted from
+#  Concepts & Examples ScreenOS Reference Guide
+#  Fundamentals
+#  Release 6.3.0, Rev. 01
+#  Part 1: Fundamentals / Chapter 3: Interfaces /
+#  Configuring Security Zone Interfaces /
+#  Binding an Interface to a Security Zone
+set interface ethernet0/3 zone "Null"
+set interface ethernet0/4 zone "Null"
+set interface bgroup1 port ethernet0/3
+set interface bgroup1 port ethernet0/4
+set interface bgroup1 zone "DMZ"
