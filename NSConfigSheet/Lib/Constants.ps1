@@ -57,4 +57,4 @@ $whichWdGoToAbsolute = $enumWdGoToAbsolute
 
 Set-Variable -Option Constant -Name ComObject -Value ('System.__ComObject' -as [type])
 
-Set-Variable -Option Constant -Name ProjectURL -Value 'http://...'
+Set-Variable -Option Constant -Name ProjectURL -Value 'http://ken-etsu-tech.blogspot.jp/2014/06/nsconfigsheet.html'

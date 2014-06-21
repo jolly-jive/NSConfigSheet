@@ -5,7 +5,7 @@ convert a Juniper ScreenOS configuration file into a configuration
 sheet in format of Microsoft Word document.
 
 You can get NSConfigSheet here:
-  <<preparating..>>
+  http://ken-etsu-tech.blogspot.jp/2014/06/nsconfigsheet.html
 
 
 Install
