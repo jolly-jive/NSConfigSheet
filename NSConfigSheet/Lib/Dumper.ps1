@@ -65,7 +65,10 @@ Function Dump-ConfigVariable
             $PolicyList
         }
         '^(vlanGroup|all)$' {
-            $VLANGroupDic.keys | Sort-Object | foreach { $script:VLANGroupDic[$_] }
+            $VLANGroupDic.keys | Sort-Object | foreach { $VLANGroupDic[$_] }
+        }
+        '^(dip|all)$' {
+            $DIPDic.keys | Sort-Object | foreach { $DIPDic[$_] }
         }
         '^(mul_url|all)$' {
         }

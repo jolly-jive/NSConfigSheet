@@ -750,6 +750,38 @@ Function Parse-ROOT-Unset-VLAN
     }
 }
 
+Function Parse-ROOT-Set-DIP
+{
+    [CmdletBinding()]
+    param(
+        [string[]]
+        [parameter(Mandatory=$true)]
+        $params
+    )
+
+    if(PhraseMatch $params 'alarm-raise',$RE_INTEGER,'alarm-clear',$RE_INTEGER) {
+        Write-Warning "Not implemented @ $($myinvocation.mycommand.name): $line"
+    } elseif(PhraseMatch $params 'alarm-raise',$RE_INTEGER) {
+        Write-Warning "Not implemented @ $($myinvocation.mycommand.name): $line"
+    } elseif(PhraseMatch $params 'group',$RE_INTEGER,'member',$RE_INTEGER) {
+        $dip_id1 = [int]$params[1]
+        $dip_id2 = [int]$params[3]
+        if(-not $DIPDic.ContainsKey($dip_id1)) {
+            $DIPDic[$dip_id1] = @{}
+        }
+        $DIPDic[$dip_id1][$dip_id2] = $dip_id1
+    } elseif(PhraseMatch $params 'group',$RE_INTEGER) {
+        $dip_id1 = [int]$params[1]
+        if(-not $DIPDic.ContainsKey($dip_id1)) {
+            $DIPDic[$dip_id1] = @{}
+        }
+    } elseif(PhraseMatch $params 'sticky') {
+        Write-Warning "Not implemented @ $($myinvocation.mycommand.name): $line"
+    } else {
+        throw "SYNTAX ERROR @ $($myinvocation.mycommand.name): $line"
+    }
+}
+
 Function Parse-ROOT-Set-Body
 {
     [CmdletBinding()]
@@ -839,6 +871,8 @@ Function Parse-ROOT-Set-Body
         Write-Warning "Not implemented @ $($myinvocation.mycommand.name): $line"
     } elseif(PhraseMatch $params 'snmpv3' -prefix) {
         Write-Warning "Not implemented @ $($myinvocation.mycommand.name): $line"
+    } elseif(PhraseMatch $params 'dip' -prefix) {
+        Parse-ROOT-Set-DIP @(ncdr $params 1)
     } else {
         throw "SYNTAX ERROR @ $($myinvocation.mycommand.name): $line"
     }

@@ -148,6 +148,56 @@ Function Parse-ROOT-Set-Interface
         $Interface_instance.WebAuth.IPAddr = $last_matches[0]['IPV4_HOST_ADDRESS']
     } elseif(PhraseMatch $params 'zone',$RE_QUOTED_NAME) {
         $Interface_instance.Zone = $last_matches[0]['QUOTED_NAME']
+    } elseif(PhraseMatch $params 'loopback-group',$RE_LOOPBACK_NAME -prefix) {
+        Write-Warning "Not implemented @ $($myinvocation.mycommand.name): $line"
+    } elseif(PhraseMatch $params 'dip',$RE_INTEGER -prefix) {
+        $dip_id = [int]$params[1]
+        $params = @(ncdr $params 2)
+        if(PhraseMatch $params 'ipv6' -prefix) {
+            #Write-Warning "Not implemented @ $($myinvocation.mycommand.name): $line"
+        } elseif(PhraseMatch $params 'shift-from',$RE_IPV4_HOST_ADDRESS) {
+            $dip_shift = New-Object DynamicIPShift
+            $dip_shift.DIPID = $dip_id
+            $dip_shift.IPAddr = $last_matches[0]['IPV4_HOST_ADDRESS']
+            $Interface_instance.DynamicIP[$dip_id] = $dip_shift
+        } else {
+            $dip_ipv4 = New-Object DynamicIPv4
+            $dip_ipv4.DIPID = $dip_id
+            $interface_instance.DynamicIP[$dip_id] = $dip_ipv4
+            $state = 'INIT'
+            while($params.Count -gt 0) {
+                switch($state) {
+                    'INIT' {
+                        if(PhraseMatch $params $RE_IPV4_HOST_ADDRESS,$RE_IPV4_HOST_ADDRESS -prefix) {
+                            $dip_ipv4.IPAddr1 = $last_matches[0]['IPV4_HOST_ADDRESS']
+                            $dip_ipv4.IPAddr2 = $last_matches[1]['IPV4_HOST_ADDRESS']
+                            $params = @(ncdr $params 2)
+                            $state = 'ADDRESS READ'
+                        } elseif(PhraseMatch $params $RE_IPV4_HOST_ADDRESS -prefix) {
+                            $dip_ipv4.IPAddr1 = $last_matches[0]['IPV4_HOST_ADDRESS']
+                            $params = @(ncdr $params 1)
+                            $state = 'ADDRESS READ'
+                        } else {
+                            $state = 'ERROR'
+                        }
+                    }
+                    'ADDRESS READ' {
+                        if(PhraseMatch $params 'scale-size',$RE_INTEGER -prefix) {
+                            $dip_ipv4.ScaleSize = [int]$params[1]
+                            $params = @(ncdr $params 2)
+                        } elseif(PhraseMatch $params 'random-port' -prefix) {
+                            $dip_ipv4.randomPort = $true
+                            $params = @(ncdr $params 1)
+                        } else {
+                            $state = 'ERROR'
+                        }
+                    }
+                    'ERROR' {
+                        throw "SYNTAX ERROR @ $($myinvocation.mycommand.name): $line"
+                    }
+                }
+            }
+        }
     } else {
         throw "SYNTAX ERROR @ $($myinvocation.mycommand.name): $line"
     }

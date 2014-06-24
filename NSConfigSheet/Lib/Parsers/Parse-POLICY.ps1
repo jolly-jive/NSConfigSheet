@@ -85,9 +85,37 @@ Function Parse-ROOT-Set-Policy
                 }
             }
             'SVC READ' {
-                if(PhraseMatch $params 'nat','src' -prefix) {
-                    $policy.Nat = 'source'
-                    $params = @(ncdr $params 2)
+                if(PhraseMatch $params 'nat' -prefix) {
+                    $policy.Nat = New-Object PolicyNat
+                    $params = @(ncdr $params 1)
+                    $state = 'NAT READ'
+                } elseif(PhraseMatch $params $RE_POLICY_ACTION -prefix) {
+                    $policy.Action = $params[0]
+                    $params = @(ncdr $params 1)
+                    $state = 'ACTION READ'
+                } else {
+                    $state = 'ERROR'
+                }
+            }
+            'NAT READ' {
+                if(PhraseMatch $params 'src','dip-id',$RE_INTEGER -prefix) {
+                    $policy.Nat.Src = $true
+                    $policy.Nat.DIPID = [int]$params[2]
+                    $params = @(ncdr $params 3)
+                } elseif(PhraseMatch $params 'src' -prefix) {
+                    $policy.Nat.Src = $true
+                    $params = @(ncdr $params 1)
+                } elseif(PhraseMatch $params 'dst','ip',$RE_IPV4_HOST_ADDRESS,$RE_IPV4_HOST_ADDRESS -prefix) {
+                    $policy.Nat.DstIPAddr1 = $last_matches[0]['IPV4_HOST_ADDRESS']
+                    $policy.Nat.DstIPAddr2 = $last_matches[1]['IPV4_HOST_ADDRESS']
+                    $params = @(ncdr $params 4)
+                } elseif(PhraseMatch $params 'dst','ip',$RE_IPV4_HOST_ADDRESS,'port',$RE_INTEGER -prefix) {
+                    $policy.Nat.DstIPAddr1 = $last_matches[0]['IPV4_HOST_ADDRESS']
+                    $policy.Nat.DstPort = $params[4]
+                    $params = @(ncdr $params 5)
+                } elseif(PhraseMatch $params 'dst','ip',$RE_IPV4_HOST_ADDRESS -prefix) {
+                    $policy.Nat.DstIPAddr1 = $last_matches[0]['IPV4_HOST_ADDRESS']
+                    $params = @(ncdr $params 3)
                 } elseif(PhraseMatch $params $RE_POLICY_ACTION -prefix) {
                     $policy.Action = $params[0]
                     $params = @(ncdr $params 1)

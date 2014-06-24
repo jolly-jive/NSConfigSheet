@@ -781,6 +781,28 @@ public class VirtualIP {
     public VirtualService[] VirtualService = {};
 }
 
+public class DynamicIPv4 : DynamicIP {
+    public string IPAddr1 = "";
+    public string IPAddr2 = "";
+    public bool? RandomPort = null;
+    public int? ScaleSize = null;
+}
+
+public class DynamicIPv6 : DynamicIP {
+}
+
+public class DynamicIPShift : DynamicIP {
+    public string IPAddr = "";
+}
+
+public class DynamicIPGroup : DynamicIP {
+    public Hashtable DynamicIP = new Hashtable();
+}
+
+public class DynamicIP {
+    public int DIPID = 0;
+}
+
 public class InterfaceProfile : NamedObject {
     public InterfacePhy Phy = new InterfacePhy();
     public string Zone = "";
@@ -801,6 +823,7 @@ public class InterfaceProfile : NamedObject {
     public bool? BypassNonIP = null;
     public bool? BypassNonIPAll = null;
     public Hashtable VirtualIP = new Hashtable();
+    public Hashtable DynamicIP = new Hashtable();
 }
 
 public class BridgeGroupInterfaceProfile : InterfaceProfile {
@@ -876,8 +899,12 @@ public enum PolicyAction {
     deny, permit, reject
 }
 
-public enum PolicyNat {
-    none, source, destination
+public class PolicyNat {
+    public bool Src = false;
+    public int? DIPID = null;
+    public string DstIPAddr1 = "";
+    public string DstIPAddr2 = "";
+    public int? DstPort = null;
 }
 
 public class Policy : PolicyBuildingBlock {
@@ -887,7 +914,7 @@ public class Policy : PolicyBuildingBlock {
     public string[] SrcAddrList = {};
     public string[] DstAddrList = {};
     public string[] SvcList = {};
-    public PolicyNat Nat = PolicyNat.none;
+    public PolicyNat Nat = null;
     public PolicyAction Action = PolicyAction.deny;
     public bool Logging = false;
     public bool Count = false;

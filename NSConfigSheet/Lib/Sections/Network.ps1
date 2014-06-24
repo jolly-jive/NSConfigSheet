@@ -198,13 +198,49 @@ Set-Variable -Scope Script -Option Constant -Name SectionNetwork -Value {
             }
 
             ########## ==== DIP for $if_name
-            Write-Section $STYLE_HEADING4 "DIP for $if_name" -skip {
+            Write-Section $STYLE_HEADING4 "DIP for $if_name" -skip:($if_instance.DynamicIP.Count -lt 1) {
                 $range = Insert-TextAtLast $STYLE_BODYTEXT
 
-                $script:table = Add-TableToDoc -Range $range -Rows 1 -Cols 4 `
-                  -Title @('ID','IP Address Range','DIP Type','memo') `
+                $script:table = Add-TableToDoc -Range $range -Rows $if_instance.DynamicIP.Count -Cols 4 `
+                  -Title @('ID','IP Address Range','Parameter','memo') `
                   -Style @($Null,$STYLE_CODE,$Null,$Null) `
                   -DontRenumber
+
+                $i_row = 2
+                foreach($dip_id in $if_instance.DynamicIP.keys | Sort-Object) {
+                    $dynamic_ip = $if_instance.DynamicIP[$dip_id]
+                    $dip_range = ''
+                    $dip_param = ''
+                    if($dynamic_ip -is [DynamicIPv4]) {
+                        if($dynamic_ip.IPAddr2 -ne ''){
+                            $dip_range = "$($dynamic_ip.IPAddr1)-$($dynamic_ip.IPAddr2)"
+                        } else {
+                            $dip_range = $dynamic_ip.IPAddr1
+                        }
+                        $param_array = @()
+                        if($dynamic_ip.RandomPort -ne $Null) {
+                            $param_array += 'random port'
+                        }
+                        if($dynamic_ip.ScaleSize -ne $Null) {
+                            $param_array += "scale size: $($dynamic_ip.ScaleSize)"
+                        }
+                        $dip_param = $param_array -join "`n"
+                    } elseif($dynamic_ip -is [DynamicIPv6]) {
+                    } elseif($dynamic_ip -is [DynamicIPShift]) {
+                        $dip_range = $dynamic_ip.IPAddr
+                    } elseif($dynamic_ip -is [DynamicIPGroup]) {
+                        $dip_range = '<Group>'
+                        $dip_param = ($dynamic_ip.DynamicIP.keys | Sort-Object) -join "`n"
+                    } else {
+                        throw "Unknow Dynamic IP $($dynamic_ip)"
+                    }
+                    Write-Block2Cells $table.Cell($i_row,1) {
+                        $dip_id
+                        $dip_range
+                        $dip_param
+                    }
+                    $i_row++
+                }
             }
 
             ########## ==== VIP for $if_name

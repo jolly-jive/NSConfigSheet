@@ -55,12 +55,12 @@ function ConvertTo-NSConfigSheet
 
         # Dump configuration objects generated from the configuration file.
         [string[]]
-        [ValidateSet('clock','admin','auth_server','management','self_log','snmp','syslog','vrouter','nsrp','screening','flow','zone','interface','service','serviceGroup','address','addressGroup','policy','vlanGroup','mul_url','all')]
+        [ValidateSet('clock','admin','auth_server','management','self_log','snmp','syslog','vrouter','nsrp','screening','flow','zone','interface','service','serviceGroup','address','addressGroup','policy','vlanGroup','dip','mul_url','all')]
         $Dump = @(),
 
         # Sections not to write to the configuration file.
         [string[]]
-        [ValidateSet('clock','administrator','permittedIP','management','auth_server','log-self','snmp','syslog','binding','zone','each_zone','interface','each_interface','routing','nsrp','screening','mul_url','flow','service','address','policy','vrouter','vlanGroup')]
+        [ValidateSet('clock','administrator','permittedIP','management','auth_server','log-self','snmp','syslog','binding','zone','each_zone','interface','each_interface','routing','nsrp','screening','mul_url','flow','service','address','policy','vrouter','vlanGroup','dip')]
         $ExcludeSection = @(),
 
         # A template name of Microsoft Word which is applied to the configuration sheet.
@@ -103,6 +103,7 @@ function ConvertTo-NSConfigSheet
     [Policy[]]$script:PolicyList = @()
     [Hashtable]$script:PolicyDic = @{}
     [Hashtable]$script:VLANGroupDic = @{}
+    [Hashtable]$script:DIPDic = @{}
 
     [int]$script:policy_id = 0
 
